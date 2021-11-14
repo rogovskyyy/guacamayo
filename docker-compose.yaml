@@ -1,0 +1,38 @@
+version: '3.6'
+
+services:
+
+  redis:
+    container_name: redis_server
+    image: redis:latest
+    tty: true
+    restart: always
+    networks:
+      internal_network:
+        ipv4_address: 172.100.0.2
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis/tmp:/tmp
+
+  rust:
+    container_name: rust_server
+    image: rustlang/rust:nightly-slim
+    tty: true
+    restart: always
+    networks:
+      internal_network:
+        ipv4_address: 172.100.0.3
+    ports:
+      - 8000:8000
+    volumes:
+      - ./data/rust/tmp:/tmp
+    depends_on:
+      - redis
+
+networks:
+  internal_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.100.0.0/24
