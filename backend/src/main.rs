@@ -14,6 +14,7 @@ use rocket_contrib::serve::StaticFiles;
 
 mod session;
 mod router;
+mod database;
 
 #[launch]
 fn rocket() -> _ {
@@ -22,15 +23,6 @@ fn rocket() -> _ {
         // Main path
         .mount("/", routes![
             router::index::index,
-            router::index::login
-        ])
-
-        // API path
-        .mount("/api", routes![
-            router::api::create,
-            router::api::read,
-            router::api::update,
-            router::api::delete,
         ])
 
         // Content Delivery Network

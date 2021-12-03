@@ -2,6 +2,18 @@ version: '3.6'
 
 services:
 
+  php:
+    container_name: php
+    image: php:8.0-apache
+    tty: true
+    restart: always
+    network_mode: host
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - ./data/php:/var/_data
+
   redis:
     container_name: redis
     image: redis:latest
@@ -11,7 +23,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - ./data/redis/tmp:/var/_data/
+      - ./data/redis:/var/_data/
 
   mysql:
     container_name: mysql
@@ -22,6 +34,6 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./data/mysql/tmp:/var/_data
+      - ./data/mysql:/var/_data
     environment:
       - MYSQL_ROOT_PASSWORD=123
