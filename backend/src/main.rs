@@ -12,7 +12,7 @@ use rocket_dyn_templates::Template;
 
 use rocket_contrib::serve::StaticFiles;
 
-mod session;
+mod redis;
 mod router;
 mod database;
 
@@ -23,6 +23,13 @@ fn rocket() -> _ {
         // Main path
         .mount("/", routes![
             router::index::index,
+        ])
+
+        .mount("/api", routes![
+            router::api::create,
+            router::api::read,
+            router::api::update,
+            router::api::delete,
         ])
 
         // Content Delivery Network

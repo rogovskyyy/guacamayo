@@ -28,6 +28,7 @@ pub mod index {
         }
 
         context.insert("callback", &input._callback);
+        context.insert("test", "123");
 
         Ok(Template::render("index", &context))
 
@@ -35,9 +36,43 @@ pub mod index {
 
 }
 
-// CRUD model
+// Basic CRUD routes
 
 pub mod api {
 
+    extern crate rocket;
+
+    use rocket::form::Form;
+    use crate::redis::Redis;
+
+    #[derive(FromForm)]
+    pub struct ReadInput {
+        _id: String,
+        _username: String,
+        _password: String,
+        _email: String,
+    }
+
+    #[post("/create")]
+    pub fn create() { }
+
+    #[post("/read", data = "<input>")]
+    pub fn read(input: Form<ReadInput>) -> &'static str {
+
+        let result = match Redis::read(&input._id) {
+            Ok(v) => {
+                return "Jest wartosc"
+            },
+            Err(_) => { }
+        };
+
+        return "Test";
+    }
+
+    #[post("/update")]
+    pub fn update() { }
+
+    #[post("/delete")]
+    pub fn delete() { }
 
 }
