@@ -1,19 +1,20 @@
+#![allow(unused_imports)]
+#![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use] 
 extern crate rocket;
-use rocket::response::content;
+use rocket::{
+    fs::FileServer,
+    response::content
+};
 
 extern crate rocket_dyn_templates;
 use rocket_dyn_templates::Template;
 
-mod session;
-mod router;
+use rocket_contrib::serve::StaticFiles;
 
-// Transaction Id
-// Login
-// Password
-// Time
-// JWT
-// Callback
+mod redis;
+mod router;
+mod database;
 
 #[launch]
 fn rocket() -> _ {
@@ -22,10 +23,8 @@ fn rocket() -> _ {
         // Main path
         .mount("/", routes![
             router::index::index,
-            router::index::login
         ])
 
-        // API path
         .mount("/api", routes![
             router::api::create,
             router::api::read,
@@ -33,6 +32,9 @@ fn rocket() -> _ {
             router::api::delete,
         ])
 
+        // Content Delivery Network
+        .mount("/public", FileServer::from("static/"))
+        
         // Attach template engine
         .attach(Template::fairing())
 }
