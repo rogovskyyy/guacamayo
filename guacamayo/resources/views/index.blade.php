@@ -62,6 +62,10 @@
     </style>
   </head>
   <body>
+  @php
+  $data = Session::all();
+    print_r($data);
+  @endphp
     <section>
       <div class='box'>
         <div class='space'>
@@ -72,17 +76,27 @@
             @if ($is_logged)
                 <span style='font-size: 8px'>You are trying to log in to the server {{ $_callback }}</span>
             @endif
+            @if (session('status_success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status_success') }}
+                </div>
+            @endif
+            @if (session('status_error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('status_error') }}
+                </div>
+            @endif
             @if (!$is_logged)
               <form action='/api/login' method='post'>
                 @csrf
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="_email" aria-describedby="emailHelp" placeholder="Enter email">
+                  <label for="exampleInputEmail1">Username</label>
+                  <input type="input" class="form-control" name="_user" aria-describedby="emailHelp" placeholder="Username">
                 <br />
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="_password" placeholder="Password">
+                  <input type="password" class="form-control" name="_pass" placeholder="Password">
                 </div>
                 <br/><br/>
                 <button type="submit" class="btn btn-primary w-100"
@@ -93,6 +107,16 @@
                       Authenticate
                       </button>
               </form>
+            @else
+                <form action="/api/logout" method="post">
+                    @csrf
+                    <button type="submit" class="btn btn-primary w-100" style='
+                      border: 1px solid white;
+                      background: none;
+                      color: white;'>
+                        Logout
+                    </button>
+                </form>
             @endif
           <br /><br /><br />
           <span style='font-size: 12px;'>

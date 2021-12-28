@@ -10,6 +10,6 @@ Route::group(['prefix'=>'api', 'as'=>'api.'], function(){
     Route::post('read',   [SSOController::class, 'read'])->name("read");
     Route::post('update', [SSOController::class, 'update'])->name("update");
     Route::post('delete', [SSOController::class, 'delete'])->name("delete");
-    Route::post('login', [SSOController::class, 'login'])->name("login");
+    Route::post('login',  [SSOController::class, 'login'])->name("login");
     Route::post('logout', [SSOController::class, 'logout'])->name("logout");
 });
