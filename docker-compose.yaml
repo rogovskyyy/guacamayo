@@ -2,9 +2,9 @@ version: '3.6'
 
 services:
 
-  php:
-    container_name: php
-    image: php:8.0-apache
+  laravel_web:
+    container_name: laravel_web
+    image: php:8.1.1-apache
     tty: true
     restart: always
     network_mode: host
@@ -12,18 +12,21 @@ services:
       - 80:80
       - 8080:8080
     volumes:
-      - ./data/php:/var/_data
+      - ./web:/var/www/html
+      - ./data/laravel:/var/_data
 
-  rust:
-    container_name: rust
-    image: rust:latest
+  laravel_db:
+    container_name: laravel_db
+    image: mariadb:latest
     tty: true
     restart: always
     network_mode: host
     ports:
-      - 8000:8000
+      - 3306:3306
     volumes:
-      - ./data/rust:/var/_data
+      - ./data/mariadb:/var/_data
+    environment:
+      - MARIADB_ROOT_PASSWORD=123
 
   redis:
     container_name: redis
@@ -35,16 +38,3 @@ services:
       - 6379:6379
     volumes:
       - ./data/redis:/var/_data
-
-  mysql:
-    container_name: mysql
-    image: mysql:latest
-    tty: true
-    restart: always
-    network_mode: host
-    ports:
-      - 3306:3306
-    volumes:
-      - ./data/mysql:/var/_data
-    environment:
-      - MYSQL_ROOT_PASSWORD=123
